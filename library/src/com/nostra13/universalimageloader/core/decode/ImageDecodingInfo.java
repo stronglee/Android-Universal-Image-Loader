@@ -46,6 +46,16 @@ public class ImageDecodingInfo {
 
 	private final boolean considerExifParams;
 	private final Options decodingOptions;
+	/**
+	 * 
+	 * @param imageKey
+	 * @param imageUri  Scheme 处理过的Url
+	 * @param originalImageUri
+	 * @param targetSize      view大小
+	 * @param viewScaleType   缩放类型
+	 * @param downloader
+	 * @param displayOptions
+	 */
 
 	public ImageDecodingInfo(String imageKey, String imageUri, String originalImageUri, ImageSize targetSize, ViewScaleType viewScaleType,
 							 ImageDownloader downloader, DisplayImageOptions displayOptions) {

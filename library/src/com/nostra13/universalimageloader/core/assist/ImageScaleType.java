@@ -20,6 +20,7 @@ package com.nostra13.universalimageloader.core.assist;
  *
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.5.0
+ * 图片的压缩类型
  */
 public enum ImageScaleType {
 	/** Image won't be scaled */

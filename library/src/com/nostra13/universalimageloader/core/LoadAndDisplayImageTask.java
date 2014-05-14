@@ -15,13 +15,17 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.core;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
+
 import android.graphics.Bitmap;
 import android.os.Handler;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.FailReason.FailType;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.assist.LoadedFrom;
@@ -31,14 +35,10 @@ import com.nostra13.universalimageloader.core.decode.ImageDecodingInfo;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader.Scheme;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.nostra13.universalimageloader.utils.IoUtils;
 import com.nostra13.universalimageloader.utils.L;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Presents load'n'display image task. Used to load image from Internet or file system, decode it to {@link Bitmap}, and
@@ -84,6 +84,9 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 	private final ImageDownloader slowNetworkDownloader;
 	private final ImageDecoder decoder;
 	private final boolean writeLogs;
+	/**
+	 * 图片原始的Uri
+	 */
 	final String uri;
 	private final String memoryCacheKey;
 	final ImageAware imageAware;
@@ -268,7 +271,11 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 		return decoder.decode(decodingInfo);
 	}
 
-	/** @return <b>true</b> - if image was downloaded successfully; <b>false</b> - otherwise */
+    /**
+     * @return <b>true</b> - if image was downloaded successfully; <b>false</b> -
+     *         otherwise
+     *        </br> 下载图片资源
+     */
 	private boolean tryCacheImageOnDisk() throws TaskCancelledException {
 		log(LOG_CACHE_IMAGE_ON_DISK);
 
@@ -290,12 +297,19 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 		return loaded;
 	}
 
+	/**
+	 * 
+     * 下载图片资源，并缓存到文件系统中
+	 */
 	private boolean downloadImage() throws IOException {
 		InputStream is = getDownloader().getStream(uri, options.getExtraForDownloader());
 		return configuration.diskCache.save(uri, is, this);
 	}
 
 	/** Decodes image file into Bitmap, resize it and save it back */
+	/**
+	 * 调整图片的大小，如适配屏幕的尺度
+	 */
 	private boolean resizeAndSaveImage(int maxWidth, int maxHeight) throws IOException {
 		// Decode image file, compress and re-save it
 		boolean saved = false;

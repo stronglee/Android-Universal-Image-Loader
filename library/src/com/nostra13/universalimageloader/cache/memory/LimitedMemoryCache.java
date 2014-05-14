@@ -41,7 +41,7 @@ public abstract class LimitedMemoryCache extends BaseMemoryCache {
 	private static final int MAX_NORMAL_CACHE_SIZE = MAX_NORMAL_CACHE_SIZE_IN_MB * 1024 * 1024;
 
 	private final int sizeLimit;
-
+    // 当前内存使用大小
 	private final AtomicInteger cacheSize;
 
 	/**

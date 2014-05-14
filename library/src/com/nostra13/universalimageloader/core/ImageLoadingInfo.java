@@ -15,12 +15,12 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.core;
 
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
+import java.util.concurrent.locks.ReentrantLock;
+
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
-
-import java.util.concurrent.locks.ReentrantLock;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 
 /**
  * Information for load'n'display image task
@@ -35,6 +35,9 @@ import java.util.concurrent.locks.ReentrantLock;
 final class ImageLoadingInfo {
 
 	final String uri;
+	/**
+	 * 与engine与的hash值比较是否被resuse
+	 */
 	final String memoryCacheKey;
 	final ImageAware imageAware;
 	final ImageSize targetSize;
