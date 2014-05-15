@@ -32,6 +32,7 @@ import static com.nostra13.example.universalimageloader.Constants.IMAGES;
 
 /**
  * Example widget provider
+ * HOME显示的插件
  * 
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  */
